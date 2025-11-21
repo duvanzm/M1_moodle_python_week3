@@ -24,10 +24,14 @@ def mostrar_inventario(inventario):
     Argumento:
         inventario (list): Lista de dicts con productos.
     """
-    print("---Invenatrio---\n")
-    for i in inventario:
-        print(f"+ nombre: {i["nombre"]} - precio: {i["precio"]} - cantidad: {"cantidad"}")
-        print("---------------------------------------------------------")
+    if inventario: 
+        print("--Invenatrio:\n")
+        for i in inventario:
+            print(f"+ nombre: {i["nombre"]} - precio: {i["precio"]} - cantidad: {i["cantidad"]}")
+            print("---------------------------------------------------------")
+    else:
+        print("Inventario Vacio")
+        return 
 
 def buscar_producto(inventario,nombre):
     """La funcion retorna un diccionario si se encuntra el nombre del producto en el inventario.
@@ -37,9 +41,11 @@ def buscar_producto(inventario,nombre):
         nombre (str): Nombre del producto a buscar.
     """
     
-    producto = next((i for i in inventario if i["nombre"] == nombre), None)
-    return(producto)
-
+    for p in inventario:
+        if p["nombre"] == nombre:
+            return p
+    return None
+ 
 def actualizar_producto(inventario, nombre, nuevo_precio, nueva_cantidad):
     """La funcion actualiza el precio y cantidad de un producto en el inventario.
 
@@ -83,10 +89,10 @@ def eliminar_producto(inventario, nombre):
             return i
         else:
             print(f"El producto {nombre} no esta en inventario")
-
+            return 
 
 def calcular_estadisticas(inventario):
-    """Se realizan la metricas y retorna un diccionario con ellas
+    """Se realizan las estadisticas y retorna un diccionario con ellas
 
     Args:
         inventario (list): Lista de dicts con productos.
@@ -94,22 +100,25 @@ def calcular_estadisticas(inventario):
     Returns:
         dict: retorna metrica que contiene un dicionario con las metricas
     """
-   
-    unidades_totales = int(sum(p["cantidad"] for p in inventario))
+    if inventario:
+        unidades_totales = int(sum(p["cantidad"] for p in inventario))
 
-    subtotal = lambda p: p["precio"] * p["cantidad"]
+        subtotal = lambda p: p["precio"] * p["cantidad"]
 
-    valor_total = float(sum(subtotal(p) for p in inventario))
+        valor_total = float(sum(subtotal(p) for p in inventario))
 
-    producto_mas_caro = max(inventario, key=lambda p: p["precio"])
+        producto_mas_caro = max(inventario, key=lambda p: p["precio"])
 
-    producto_mayor_stock = max(inventario, key=lambda p: p["cantidad"])
+        producto_mayor_stock = max(inventario, key=lambda p: p["cantidad"])
 
-    metrica = {
-        "unidades_totales": unidades_totales,
-        "valor_total": valor_total,
-        "producto_mas_caro": producto_mas_caro,
-        "producto_mayor_stock": producto_mayor_stock,
+        metrica = {
+            "unidades_totales": unidades_totales,
+            "valor_total": valor_total,
+            "producto_mas_caro": producto_mas_caro,
+            "producto_mayor_stock": producto_mayor_stock,
 
-    }
-    return metrica
+        }
+        return metrica
+    else:
+        print("Inventario vacio")
+        return
